@@ -1,0 +1,55 @@
+🎵 MP3 ALBUM TOOL - READ ME FIRST 🎵
+===============================================
+
+Welcome to MP3 Album Tool!
+This tool organizes your MP3 music collection for better compatibility with car audio systems and other devices.
+
+📦 INSTALLATION OPTIONS:
+========================
+
+OPTION 1: DIRECT EXECUTION (Recommended for testing)
+- Simply run "MP3AlbumTool.exe"
+- No installation required
+- Works immediately
+
+OPTION 2: AUTOMATIC INSTALLATION
+- Run "INSTALL.bat" as administrator
+- Installs to Program Files
+- Creates desktop and Start Menu shortcuts
+
+📁 INCLUDED FILES:
+==================
+- MP3AlbumTool.exe          → Main application
+- config.json               → Configuration file
+- INSTALL.bat               → Automatic installer
+- MP3AlbumTool_Installer_Final.ps1 → PowerShell installer
+- README.md                 → Complete documentation
+- LICENSE.txt               → Software license
+
+💻 SYSTEM REQUIREMENTS:
+=======================
+- Windows 7/8/10/11 (32 or 64-bit)
+- 512 MB RAM minimum
+- 50 MB free disk space
+- No additional dependencies
+
+🚀 HOW TO USE:
+==============
+1. Launch the application
+2. Select a folder containing MP3 albums
+3. Configure processing options
+4. Click "Process" to organize your music
+5. Enjoy improved audio experience in your car!
+
+🔧 TROUBLESHOOTING:
+===================
+- If Windows blocks the app: Click "More info" → "Run anyway"
+- If antivirus blocks: Add exception for the application folder
+- If permission errors: Run as administrator
+- If files are missing: Ensure all files are in the same folder
+
+📖 FOR MORE INFORMATION:
+========================
+Read the complete README.md file for detailed instructions and features.
+
+🎶 ENJOY YOUR ORGANIZED MUSIC COLLECTION! 🎶
