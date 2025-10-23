@@ -1,41 +1,28 @@
 # 🎵 MP3 Album Tool
 
-Uma ferramenta completa para organizar e editar metadados de álbuns MP3 com interface gráfica intuitiva.
+A professional tool for organizing and optimizing MP3 collections for use in cars and audio systems.
 
-## ✨ Funcionalidades
+## 📦 Installation
 
-- **Edição de Metadados**: Edite título, artista, álbum, ano, género e mais
-- **Capas de Álbum**: Adicione, visualize e gerencie capas de álbuns
-- **Busca Automática**: Integração com APIs do Deezer, TheAudioDB e YouTube Music
-- **Processamento em Lote**: Processe múltiplos ficheiros simultaneamente
-- **Ordenação Inteligente**: Ordene por qualquer coluna (nome, artista, status, etc.)
-- **Interface Moderna**: Interface gráfica limpa e fácil de usar
-- **Suporte Completo**: Suporta formatos MP3, FLAC, M4A e mais
+### Option 1: Automatic Installation (Recommended)
+1. Run `INSTALL.bat` as **Administrator**
+2. Follow the on-screen instructions
+3. The application will be installed in `C:\Program Files\MP3AlbumTool`
+4. Shortcuts will be created on Desktop and Start Menu
 
-## 🚀 Instalação
+### Option 2: Direct Execution
+- Run directly `MP3AlbumTool.exe`
+- No installation required
 
-### Opção 1: Executável (Recomendado)
-1. Descarregue o `MP3AlbumTool_Setup.exe`
-2. Execute como administrador
-3. Siga as instruções do instalador
-4. Lance a aplicação pelo menu Iniciar ou atalho do desktop
+## 🚀 How to Use
 
-### Opção 2: Código Fonte
-```bash
-# Instale as dependências
-pip install -r requirements.txt
+1. **Open the application** through the shortcut or executable
+2. **Select the folder** containing your MP3 albums
+3. **Configure processing options**
+4. **Click "Process"** and wait for completion
+5. **Create M3U playlists** with album separators using `#EXTALB`
 
-# Execute a aplicação
-python final_optimized_mp3_tool.py
-```
-
-## 📖 Como Usar
-
-1. **Carregar Ficheiros**: Clique em "Carregar Ficheiros" e selecione os seus MP3s
-2. **Editar Metadados**: Duplo-clique numa linha para editar os metadados
-3. **Buscar Informações**: Use "Buscar no Deezer/TheAudioDB" para encontrar informações automaticamente
-4. **Adicionar Capas**: Clique em "Adicionar Capa" para inserir imagens de álbum
-5. **Guardar**: Clique em "Guardar Alterações" para aplicar as modificações
+## ✨ Main Features
 
 ## 🔧 Compilar Executável
 

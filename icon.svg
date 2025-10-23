@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradientes baseados no design enviado -->
+    <linearGradient id="noteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e88e5;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#42a5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff7043;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff7043;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#e91e63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ad1457;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e91e63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ad1457;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Sombra -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Fundo transparente para ícone -->
+  <rect width="256" height="256" fill="transparent"/>
+  
+  <!-- Nota musical principal -->
+  <g transform="translate(40, 60) scale(3.5)" filter="url(#shadow)">
+    <!-- Haste da nota -->
+    <path d="M20 5 L20 35 C20 38 17 40 14 40 C11 40 8 38 8 35 C8 32 11 30 14 30 C16 30 18 31 19 32 L19 15 L35 12 L35 30 C35 33 32 35 29 35 C26 35 23 33 23 30 C23 27 26 25 29 25 C31 25 33 26 34 27 L34 8 L20 5 Z" 
+          fill="url(#noteGradient)"/>
+  </g>
+  
+  <!-- Engrenagem -->
+  <g transform="translate(140, 80) scale(2.2)" filter="url(#shadow)">
+    <!-- Dentes da engrenagem -->
+    <path d="M24 2 L26 2 L28 6 L32 6 L34 2 L36 2 L38 6 L42 8 L42 10 L46 12 L46 14 L42 16 L42 18 L38 20 L36 24 L34 24 L32 20 L28 20 L26 24 L24 24 L22 20 L18 20 L16 24 L14 24 L12 20 L8 18 L8 16 L4 14 L4 12 L8 10 L8 8 L12 6 L14 2 L16 2 L18 6 L22 6 L24 2 Z" 
+          fill="url(#gearGradient)"/>
+    
+    <!-- Centro da engrenagem com botão play -->
+    <circle cx="25" cy="13" r="8" fill="#ffffff"/>
+    <path d="M22 10 L22 16 L28 13 Z" fill="url(#playGradient)"/>
+  </g>
+  
+  <!-- Texto MP3 Tool -->
+  <g transform="translate(128, 180)">
+    <!-- MP3 -->
+    <text x="-60" y="0" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#1e88e5">MP3</text>
+    <!-- Tool -->
+    <text x="30" y="0" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#e91e63">Tool</text>
+  </g>
+  
+  <!-- Elementos decorativos -->
+  <circle cx="200" cy="50" r="4" fill="#42a5f5" opacity="0.6"/>
+  <circle cx="50" cy="200" r="4" fill="#e91e63" opacity="0.6"/>
+  <circle cx="200" cy="200" r="3" fill="#ff7043" opacity="0.5"/>
+  
+  <!-- Brilho sutil -->
+  <ellipse cx="100" cy="80" rx="20" ry="15" fill="#ffffff" opacity="0.1" transform="rotate(-30 100 80)"/>
+</svg>

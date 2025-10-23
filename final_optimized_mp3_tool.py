@@ -254,6 +254,22 @@ class FinalMP3Tool:
         self.root.minsize(1200, 700)
         self.root.resizable(True, True)
         
+        # Configurar ícone da aplicação
+        try:
+            # Tentar carregar o ícone ICO
+            icon_path = os.path.join(os.path.dirname(__file__), "icon.ico")
+            if os.path.exists(icon_path):
+                self.root.iconbitmap(icon_path)
+            else:
+                # Fallback: tentar carregar o PNG como PhotoImage
+                icon_png_path = os.path.join(os.path.dirname(__file__), "icon_preview.png")
+                if os.path.exists(icon_png_path):
+                    icon_image = tk.PhotoImage(file=icon_png_path)
+                    self.root.iconphoto(True, icon_image)
+        except Exception as e:
+            # Se falhar, continuar sem ícone
+            print(f"Aviso: Não foi possível carregar o ícone: {e}")
+        
         # Configure window for better resizing
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)

@@ -228,16 +228,16 @@ del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\MP3 Album Tool.lnk" 2>nul
 
 echo Removing application files...
 cd /d "%TEMP%"
-del /q "$InstallPath\*.exe" 2>nul
-del /q "$InstallPath\*.py" 2>nul
-del /q "$InstallPath\*.json" 2>nul
-del /q "$InstallPath\*.md" 2>nul
-del /q "$InstallPath\*.ico" 2>nul
-del /q "$InstallPath\*.txt" 2>nul
-del /q "$InstallPath\*.bat" 2>nul
 
-echo Removing installation directory...
+echo Removing installation directory and all files...
 rmdir /s /q "$InstallPath" 2>nul
+
+echo Verifying removal...
+if exist "$InstallPath" (
+    echo Warning: Some files may still exist. Trying alternative removal...
+    timeout /t 2 /nobreak >nul
+    rmdir /s /q "$InstallPath" 2>nul
+)
 
 echo.
 echo ===============================================================

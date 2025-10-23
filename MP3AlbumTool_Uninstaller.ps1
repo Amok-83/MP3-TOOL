@@ -228,11 +228,11 @@ if ($errors.Count -eq 0 -and $warnings.Count -eq 0) {
     }
     
     if ($errors.Count -eq 0) {
-        Write-Host "✅ Desinstalação concluída com avisos menores" -ForegroundColor Green
+        Write-Host 'Desinstalacao concluida com avisos menores' -ForegroundColor Green
     }
 }
 
 Write-Host ""
 if (-not $Silent) {
-    Read-Host "Press Enter to exit"
+    Read-Host 'Prima Enter para sair'
 }

@@ -1,0 +1,25 @@
+{
+  "sources": {
+    "musicbrainz": true,
+    "lastfm": {
+      "enabled": false,
+      "api_key": ""
+    },
+    "spotify": {
+      "enabled": false,
+      "token": ""
+    },
+    "google": {
+      "enabled": false,
+      "key": "",
+      "cx": ""
+    }
+  },
+  "search_mode": "artist_title",
+  "translate": {
+    "enabled": false,
+    "provider": "libretranslate",
+    "endpoint": "https://libretranslate.de/translate",
+    "api_key": ""
+  }
+}
