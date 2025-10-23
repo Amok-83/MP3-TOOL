@@ -1,46 +1,55 @@
-# 🎵 MP3 Album Tool
+# 🎵 MP3 Album Tool - Distribution Package
 
-A professional tool for organizing and optimizing MP3 collections for use in cars and audio systems.
+Professional MP3 collection organizer optimized for car audio systems and music enthusiasts.
 
-## 📦 Installation
+## 📦 Quick Installation
 
-### Option 1: Automatic Installation (Recommended)
-1. Run `INSTALL.bat` as **Administrator**
-2. Follow the on-screen instructions
-3. The application will be installed in `C:\Program Files\MP3AlbumTool`
-4. Shortcuts will be created on Desktop and Start Menu
+### Automatic Installation (Recommended)
+1. Run `MP3AlbumTool_Installer_Final.ps1` as **Administrator**
+2. Follow the installation prompts
+3. Application will be installed with shortcuts
 
-### Option 2: Direct Execution
-- Run directly `MP3AlbumTool.exe`
+### Portable Use
+- Run `MP3AlbumTool.exe` directly
 - No installation required
 
-## 🚀 How to Use
+## 🚀 Getting Started
 
-1. **Open the application** through the shortcut or executable
-2. **Select the folder** containing your MP3 albums
-3. **Configure processing options**
-4. **Click "Process"** and wait for completion
-5. **Create M3U playlists** with album separators using `#EXTALB`
+1. **Launch** the application
+2. **Select** your MP3 music folder
+3. **Configure** processing options
+4. **Process** your collection
+5. **Enjoy** organized music with M3U playlists
 
-## ✨ Main Features
+## ✨ Features
 
-## 🔧 Compilar Executável
+- **Smart Organization**: Automatically structures MP3 albums
+- **ID3 Tag Optimization**: Cleans and standardizes metadata
+- **Car Audio Ready**: Optimized for automotive systems
+- **Playlist Creation**: Generates M3U files with album separators
+- **Batch Processing**: Handles large collections efficiently
 
-```bash
-# Limpar ficheiros antigos
-.\cleanup.ps1
+## 📋 System Requirements
 
-# Gerar executável
-.\build.ps1
-```
+- **OS**: Windows 10/11 (64-bit)
+- **RAM**: 512MB minimum
+- **Storage**: 100MB free space
+- **Format**: MP3 files with ID3 tags
 
-## 📋 Requisitos do Sistema
+## 📁 Package Contents
 
-- **Windows**: 10/11 (64-bit)
-- **Python**: 3.8+ (apenas para código fonte)
-- **RAM**: 512MB mínimo
-- **Espaço**: 100MB livres
+- `MP3AlbumTool.exe` - Main application
+- `MP3AlbumTool_Installer_Final.ps1` - PowerShell installer
+- `config.json` - Configuration file
+- `LICENSE.txt` - License information
+- `README.md` - This documentation
+
+## 🆘 Support
+
+For issues or questions:
+- Visit: https://github.com/Amok-83/MP3-TOOL
+- Report bugs via GitHub Issues
 
 ---
 
-**Desenvolvido com ❤️ para amantes de música**
+**Professional music organization made simple**
