@@ -44,6 +44,14 @@ Professional MP3 collection organizer optimized for car audio systems and music 
 - `LICENSE.txt` - License information
 - `README.md` - This documentation
 
+## 💝 Support the Project
+
+If this tool has helped organize your music collection, please consider supporting the development:
+
+[![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate/?business=TLBBHD3NY3SUY&no_recurring=0&item_name=Your+support+is+greatly+appreciated%3B+please+consider+a+donation+if+you+enjoy+using+this+app&currency_code=EUR)
+
+Your support helps maintain and improve this free tool! 🎵
+
 ## 🆘 Support
 
 For issues or questions:

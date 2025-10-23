@@ -78,6 +78,14 @@ MP3AlbumTool/
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+## 💝 Support the Project
+
+If you find this application useful and it has helped organize your music collection, please consider supporting the development:
+
+[![Donate with PayPal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.com/donate/?business=TLBBHD3NY3SUY&no_recurring=0&item_name=Your+support+is+greatly+appreciated%3B+please+consider+a+donation+if+you+enjoy+using+this+app&currency_code=EUR)
+
+Your support is greatly appreciated and helps maintain and improve this free tool for the music community! 🎵
+
 ## 🆘 Support
 
 If you encounter any issues or have questions:
