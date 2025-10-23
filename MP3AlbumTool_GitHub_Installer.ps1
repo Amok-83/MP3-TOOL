@@ -54,10 +54,10 @@ function Download-FromGitHub {
         
         # List of files to download
         $FilesToDownload = @(
-            "MP3AlbumTool_Distribuicao_Final/MP3AlbumTool.exe",
+            "MP3AlbumTool_Distribution/MP3AlbumTool.exe",
             "final_optimized_mp3_tool.py",
-            "MP3AlbumTool_Distribuicao_Final/config.json",
-            "MP3AlbumTool_Distribuicao_Final/README.md",
+            "MP3AlbumTool_Distribution/config.json",
+            "MP3AlbumTool_Distribution/README.md",
             "icon.ico"
         )
         

@@ -6,9 +6,9 @@ Your MP3 Album Tool is now fully prepared for GitHub distribution with English t
 
 ## 📁 Files Ready for GitHub Upload
 
-### Main Distribution Folder: `MP3AlbumTool_Distribuicao_Final/`
-```
-MP3AlbumTool_Distribuicao_Final/
+### Main Distribution Folder: `MP3AlbumTool_Distribution/`
+
+MP3AlbumTool_Distribution/
 ├── MP3AlbumTool.exe                    # Main application
 ├── config.json                        # Configuration file
 ├── README.md                          # Documentation (English)
@@ -42,7 +42,7 @@ MP3AlbumTool_Distribuicao_Final/
 5. Initialize with README
 
 ### 2. Upload Files
-Upload the entire `MP3AlbumTool_Distribuicao_Final` folder contents to your repository.
+Upload the entire `MP3AlbumTool_Distribution` folder contents to your repository.
 
 ### 3. Update Repository URLs
 Edit these files with your actual GitHub username:
