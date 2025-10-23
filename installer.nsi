@@ -48,6 +48,11 @@ section "install"
     file "README.md"
     file "LICENSE.txt"
     
+    # Scripts de desinstalação
+    file "MP3AlbumTool_Uninstaller.ps1"
+    file "DesinstalarMP3AlbumTool.bat"
+    file "DesinstalarMP3AlbumTool_Simples.bat"
+    
     # Criar atalho no desktop
     createShortCut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\MP3AlbumTool.exe" "" "$INSTDIR\MP3AlbumTool.exe"
     
@@ -55,6 +60,8 @@ section "install"
     createDirectory "$SMPROGRAMS\${APPNAME}"
     createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\MP3AlbumTool.exe" "" "$INSTDIR\MP3AlbumTool.exe"
     createShortCut "$SMPROGRAMS\${APPNAME}\Desinstalar.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe"
+    createShortCut "$SMPROGRAMS\${APPNAME}\Desinstalar (PowerShell).lnk" "$INSTDIR\DesinstalarMP3AlbumTool.bat" "" "$INSTDIR\DesinstalarMP3AlbumTool.bat"
+    createShortCut "$SMPROGRAMS\${APPNAME}\Desinstalar (Simples).lnk" "$INSTDIR\DesinstalarMP3AlbumTool_Simples.bat" "" "$INSTDIR\DesinstalarMP3AlbumTool_Simples.bat"
     
     # Registar no sistema
     writeRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayName" "${APPNAME}"
@@ -84,10 +91,17 @@ section "uninstall"
     delete "$INSTDIR\LICENSE.txt"
     delete "$INSTDIR\uninstall.exe"
     
+    # Remover scripts de desinstalação
+    delete "$INSTDIR\MP3AlbumTool_Uninstaller.ps1"
+    delete "$INSTDIR\DesinstalarMP3AlbumTool.bat"
+    delete "$INSTDIR\DesinstalarMP3AlbumTool_Simples.bat"
+    
     # Remover atalhos
     delete "$DESKTOP\${APPNAME}.lnk"
     delete "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk"
     delete "$SMPROGRAMS\${APPNAME}\Desinstalar.lnk"
+    delete "$SMPROGRAMS\${APPNAME}\Desinstalar (PowerShell).lnk"
+    delete "$SMPROGRAMS\${APPNAME}\Desinstalar (Simples).lnk"
     rmDir "$SMPROGRAMS\${APPNAME}"
     
     # Remover pasta de instalação
