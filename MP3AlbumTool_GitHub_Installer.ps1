@@ -54,10 +54,11 @@ function Download-FromGitHub {
         
         # List of files to download
         $FilesToDownload = @(
-            "dist/MP3AlbumTool.exe",
+            "MP3AlbumTool_Distribuicao_Final/MP3AlbumTool.exe",
             "final_optimized_mp3_tool.py",
-            "config.json",
-            "README.md"
+            "MP3AlbumTool_Distribuicao_Final/config.json",
+            "MP3AlbumTool_Distribuicao_Final/README.md",
+            "icon.ico"
         )
         
         $DownloadedFiles = @()
@@ -141,6 +142,7 @@ function Create-Shortcuts {
     
     try {
         $ExePath = Join-Path $InstallPath $ExeName
+        $IconPath = Join-Path $InstallPath "icon.ico"
         
         # Create desktop shortcut
         $DesktopPath = [Environment]::GetFolderPath("Desktop")
@@ -151,6 +153,9 @@ function Create-Shortcuts {
         $Shortcut.TargetPath = $ExePath
         $Shortcut.WorkingDirectory = $InstallPath
         $Shortcut.Description = "MP3 Album Tool"
+        if (Test-Path $IconPath) {
+            $Shortcut.IconLocation = $IconPath
+        }
         $Shortcut.Save()
         
         Write-ColorOutput Green "Desktop shortcut created"
@@ -163,6 +168,9 @@ function Create-Shortcuts {
         $Shortcut2.TargetPath = $ExePath
         $Shortcut2.WorkingDirectory = $InstallPath
         $Shortcut2.Description = "MP3 Album Tool"
+        if (Test-Path $IconPath) {
+            $Shortcut2.IconLocation = $IconPath
+        }
         $Shortcut2.Save()
         
         Write-ColorOutput Green "Start Menu shortcut created"
@@ -192,6 +200,59 @@ function Add-ToSystemPath {
     }
     catch {
         Write-ColorOutput Red "Error adding to PATH: $($_.Exception.Message)"
+        return $false
+    }
+}
+
+function Create-Uninstaller {
+    param($InstallPath)
+    
+    try {
+        Write-ColorOutput Yellow "Creating uninstaller..."
+        
+        $UninstallerPath = Join-Path $InstallPath "Uninstall_MP3AlbumTool.bat"
+        
+        $UninstallerContent = @"
+@echo off
+title MP3 Album Tool - Uninstaller
+echo.
+echo ===============================================================
+echo                    MP3 ALBUM TOOL
+echo                      Uninstaller
+echo ===============================================================
+echo.
+
+echo Removing shortcuts...
+del "%USERPROFILE%\Desktop\MP3 Album Tool.lnk" 2>nul
+del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\MP3 Album Tool.lnk" 2>nul
+
+echo Removing application files...
+cd /d "%TEMP%"
+del /q "$InstallPath\*.exe" 2>nul
+del /q "$InstallPath\*.py" 2>nul
+del /q "$InstallPath\*.json" 2>nul
+del /q "$InstallPath\*.md" 2>nul
+del /q "$InstallPath\*.ico" 2>nul
+del /q "$InstallPath\*.txt" 2>nul
+del /q "$InstallPath\*.bat" 2>nul
+
+echo Removing installation directory...
+rmdir /s /q "$InstallPath" 2>nul
+
+echo.
+echo ===============================================================
+echo                 UNINSTALLATION COMPLETED!
+echo ===============================================================
+echo.
+pause
+"@
+        
+        $UninstallerContent | Out-File -FilePath $UninstallerPath -Encoding UTF8
+        Write-ColorOutput Green "Uninstaller created successfully"
+        return $true
+    }
+    catch {
+        Write-ColorOutput Yellow "Could not create uninstaller: $($_.Exception.Message)"
         return $false
     }
 }
@@ -247,6 +308,9 @@ if (-not (Install-Application -SourcePath $DownloadPath -DestinationPath $Instal
 
 # Create shortcuts
 Create-Shortcuts -InstallPath $InstallPath -ExeName $ExeName
+
+# Create uninstaller
+Create-Uninstaller -InstallPath $InstallPath
 
 # Add to PATH if requested
 if ($AddToPath) {
