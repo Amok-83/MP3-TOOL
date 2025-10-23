@@ -3,7 +3,7 @@
 # Description: Automatic installer that downloads and installs MP3 Album Tool from GitHub
 
 param(
-    [string]$InstallPath = "C:\Program Files\MP3AlbumTool",
+    [string]$InstallPath = "$env:LOCALAPPDATA\MP3AlbumTool",
     [string]$GitHubRepo = "Amok-83/MP3-TOOL",
     [switch]$AddToPath = $false
 )
@@ -13,7 +13,7 @@ $AppName = "MP3 Album Tool"
 $ExeName = "MP3AlbumTool.exe"
 $TempDir = "$env:TEMP\MP3AlbumTool_Install"
 $GitHubReleaseUrl = "https://api.github.com/repos/$GitHubRepo/releases/latest"
-$GitHubDownloadUrl = "https://github.com/$GitHubRepo/archive/refs/heads/main.zip"
+$GitHubRawUrl = "https://raw.githubusercontent.com/$GitHubRepo/main"
 
 # Colors for output
 function Write-ColorOutput($ForegroundColor) {
@@ -28,10 +28,10 @@ function Write-ColorOutput($ForegroundColor) {
 function Write-Header {
     Clear-Host
     Write-ColorOutput Green @"
-╔══════════════════════════════════════════════════════════════╗
-║                    🎵 MP3 ALBUM TOOL                        ║
-║                   Automatic Installer                       ║
-╚══════════════════════════════════════════════════════════════╝
+===============================================================
+                    MP3 ALBUM TOOL
+                   Automatic Installer
+===============================================================
 "@
     Write-Host ""
 }
@@ -43,76 +43,95 @@ function Test-Administrator {
 }
 
 function Download-FromGitHub {
-    param($Url, $OutputPath)
+    param($BaseUrl, $OutputPath)
     
     try {
-        Write-ColorOutput Yellow "📥 Downloading from: $Url"
+        Write-ColorOutput Yellow "Downloading from GitHub..."
         
-        # Use Invoke-WebRequest with appropriate settings
+        # Set TLS version
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $ProgressPreference = 'SilentlyContinue'
-        Invoke-WebRequest -Uri $Url -OutFile $OutputPath -UseBasicParsing
         
-        Write-ColorOutput Green "✅ Download completed!"
-        return $true
+        # List of files to download
+        $FilesToDownload = @(
+            "dist/MP3AlbumTool.exe",
+            "final_optimized_mp3_tool.py",
+            "config.json",
+            "README.md"
+        )
+        
+        $DownloadedFiles = @()
+        
+        foreach ($File in $FilesToDownload) {
+            $FileUrl = "$BaseUrl/$File"
+            $FileName = Split-Path $File -Leaf
+            $LocalPath = Join-Path $OutputPath $FileName
+            
+            Write-Host "Downloading: $FileName"
+            
+            try {
+                Invoke-WebRequest -Uri $FileUrl -OutFile $LocalPath -UseBasicParsing
+                $DownloadedFiles += $LocalPath
+                Write-ColorOutput Green "Downloaded: $FileName"
+            }
+            catch {
+                Write-ColorOutput Yellow "Could not download: $FileName (may not exist)"
+            }
+        }
+        
+        if ($DownloadedFiles.Count -gt 0) {
+            Write-ColorOutput Green "Download completed! Downloaded $($DownloadedFiles.Count) files."
+            return $true
+        } else {
+            Write-ColorOutput Red "No files were downloaded successfully."
+            return $false
+        }
     }
     catch {
-        Write-ColorOutput Red "❌ Download error: $($_.Exception.Message)"
+        Write-ColorOutput Red "ERROR: Download failed! Check internet connection and repository URL."
+        Write-Host "Error details: $($_.Exception.Message)"
         return $false
     }
 }
 
-function Extract-Archive {
-    param($ArchivePath, $ExtractPath)
-    
-    try {
-        Write-ColorOutput Yellow "📦 Extracting files..."
-        
-        # Create destination folder
-        if (!(Test-Path $ExtractPath)) {
-            New-Item -ItemType Directory -Path $ExtractPath -Force | Out-Null
-        }
-        
-        # Extract using .NET
-        Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($ArchivePath, $ExtractPath)
-        
-        Write-ColorOutput Green "✅ Extraction completed!"
-        return $true
-    }
-    catch {
-        Write-ColorOutput Red "❌ Extraction error: $($_.Exception.Message)"
-        return $false
-    }
-}
+
 
 function Install-Application {
     param($SourcePath, $DestinationPath)
     
     try {
-        Write-ColorOutput Yellow "📁 Installing application..."
+        Write-ColorOutput Yellow "Installing application..."
         
         # Create installation folder
         if (!(Test-Path $DestinationPath)) {
             New-Item -ItemType Directory -Path $DestinationPath -Force | Out-Null
         }
         
-        # Find extracted folder (usually has -main suffix)
-        $ExtractedFolder = Get-ChildItem $SourcePath -Directory | Where-Object { $_.Name -like "*main*" -or $_.Name -like "*master*" } | Select-Object -First 1
+        # Copy all downloaded files to destination
+        $SourceFiles = Get-ChildItem $SourcePath -File
+        $CopiedFiles = 0
         
-        if ($ExtractedFolder) {
-            $SourceFiles = "$($ExtractedFolder.FullName)\MP3AlbumTool_Distribuicao_Final\*"
-        } else {
-            $SourceFiles = "$SourcePath\*"
+        foreach ($File in $SourceFiles) {
+            try {
+                Copy-Item $File.FullName $DestinationPath -Force
+                Write-ColorOutput Green "Copied: $($File.Name)"
+                $CopiedFiles++
+            }
+            catch {
+                Write-ColorOutput Yellow "Could not copy: $($File.Name)"
+            }
         }
         
-        # Copy files
-        Copy-Item -Path $SourceFiles -Destination $DestinationPath -Recurse -Force
-        
-        Write-ColorOutput Green "✅ Application installed at: $DestinationPath"
-        return $true
+        if ($CopiedFiles -gt 0) {
+            Write-ColorOutput Green "Installation completed! Copied $CopiedFiles files."
+            return $true
+        } else {
+            Write-ColorOutput Red "No files were copied to installation directory."
+            return $false
+        }
     }
     catch {
-        Write-ColorOutput Red "❌ Installation error: $($_.Exception.Message)"
+        Write-ColorOutput Red "Installation error: $($_.Exception.Message)"
         return $false
     }
 }
@@ -121,32 +140,36 @@ function Create-Shortcuts {
     param($InstallPath, $ExeName)
     
     try {
-        Write-ColorOutput Yellow "🔗 Creating shortcuts..."
-        
-        $WshShell = New-Object -comObject WScript.Shell
         $ExePath = Join-Path $InstallPath $ExeName
         
-        # Desktop shortcut
+        # Create desktop shortcut
         $DesktopPath = [Environment]::GetFolderPath("Desktop")
-        $DesktopShortcut = $WshShell.CreateShortcut("$DesktopPath\$AppName.lnk")
-        $DesktopShortcut.TargetPath = $ExePath
-        $DesktopShortcut.WorkingDirectory = $InstallPath
-        $DesktopShortcut.Description = $AppName
-        $DesktopShortcut.Save()
+        $ShortcutPath = Join-Path $DesktopPath "MP3 Album Tool.lnk"
         
-        # Start Menu shortcut
+        $WshShell = New-Object -ComObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+        $Shortcut.TargetPath = $ExePath
+        $Shortcut.WorkingDirectory = $InstallPath
+        $Shortcut.Description = "MP3 Album Tool"
+        $Shortcut.Save()
+        
+        Write-ColorOutput Green "Desktop shortcut created"
+        
+        # Create Start Menu shortcut
         $StartMenuPath = [Environment]::GetFolderPath("StartMenu")
-        $StartMenuShortcut = $WshShell.CreateShortcut("$StartMenuPath\Programs\$AppName.lnk")
-        $StartMenuShortcut.TargetPath = $ExePath
-        $StartMenuShortcut.WorkingDirectory = $InstallPath
-        $StartMenuShortcut.Description = $AppName
-        $StartMenuShortcut.Save()
+        $StartMenuShortcut = Join-Path $StartMenuPath "Programs\MP3 Album Tool.lnk"
         
-        Write-ColorOutput Green "✅ Shortcuts created!"
+        $Shortcut2 = $WshShell.CreateShortcut($StartMenuShortcut)
+        $Shortcut2.TargetPath = $ExePath
+        $Shortcut2.WorkingDirectory = $InstallPath
+        $Shortcut2.Description = "MP3 Album Tool"
+        $Shortcut2.Save()
+        
+        Write-ColorOutput Green "Start Menu shortcut created"
         return $true
     }
     catch {
-        Write-ColorOutput Red "❌ Error creating shortcuts: $($_.Exception.Message)"
+        Write-ColorOutput Yellow "Could not create shortcuts: $($_.Exception.Message)"
         return $false
     }
 }
@@ -155,20 +178,20 @@ function Add-ToSystemPath {
     param($InstallPath)
     
     try {
-        Write-ColorOutput Yellow "🛤️ Adding to system PATH..."
+        Write-ColorOutput Yellow "Adding to system PATH..."
         
         $CurrentPath = [Environment]::GetEnvironmentVariable("Path", "Machine")
         if ($CurrentPath -notlike "*$InstallPath*") {
             $NewPath = "$CurrentPath;$InstallPath"
             [Environment]::SetEnvironmentVariable("Path", $NewPath, "Machine")
-            Write-ColorOutput Green "✅ Added to PATH!"
+            Write-ColorOutput Green "Added to PATH!"
         } else {
-            Write-ColorOutput Yellow "ℹ️ Already exists in PATH"
+            Write-ColorOutput Yellow "Already exists in PATH"
         }
         return $true
     }
     catch {
-        Write-ColorOutput Red "❌ Error adding to PATH: $($_.Exception.Message)"
+        Write-ColorOutput Red "Error adding to PATH: $($_.Exception.Message)"
         return $false
     }
 }
@@ -179,29 +202,20 @@ function Cleanup-TempFiles {
     try {
         if (Test-Path $TempDir) {
             Remove-Item $TempDir -Recurse -Force
-            Write-ColorOutput Green "🧹 Temporary files removed"
+            Write-ColorOutput Green "Temporary files removed"
         }
     }
     catch {
-        Write-ColorOutput Yellow "⚠️ Could not remove temporary files"
+        Write-ColorOutput Yellow "Could not remove temporary files"
     }
 }
 
 # MAIN SCRIPT
 Write-Header
 
-# Check administrator privileges
-if (-not (Test-Administrator)) {
-    Write-ColorOutput Red "❌ This script must be run as Administrator!"
-    Write-ColorOutput Yellow "💡 Right-click and select 'Run as administrator'"
-    Write-Host ""
-    Read-Host "Press Enter to exit"
-    exit 1
-}
-
-Write-ColorOutput Cyan "🚀 Starting MP3 Album Tool installation..."
-Write-ColorOutput White "📍 Installation path: $InstallPath"
-Write-ColorOutput White "📦 GitHub repository: $GitHubRepo"
+Write-ColorOutput Cyan "Starting MP3 Album Tool installation..."
+Write-ColorOutput White "Installation path: $InstallPath"
+Write-ColorOutput White "GitHub repository: $GitHubRepo"
 Write-Host ""
 
 # Create temporary directory
@@ -211,28 +225,23 @@ if (Test-Path $TempDir) {
 New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
 
 # Download from GitHub
-$ZipFile = Join-Path $TempDir "mp3albumtool.zip"
-if (-not (Download-FromGitHub -Url $GitHubDownloadUrl -OutputPath $ZipFile)) {
-    Write-ColorOutput Red "❌ Failed to download from GitHub"
-    Cleanup-TempFiles -TempDir $TempDir
-    Read-Host "Press Enter to exit"
-    exit 1
+$DownloadPath = Join-Path $TempDir "downloads"
+if (!(Test-Path $DownloadPath)) {
+    New-Item -ItemType Directory -Path $DownloadPath -Force | Out-Null
 }
 
-# Extract files
-$ExtractPath = Join-Path $TempDir "extracted"
-if (-not (Extract-Archive -ArchivePath $ZipFile -ExtractPath $ExtractPath)) {
-    Write-ColorOutput Red "❌ Failed to extract files"
+if (-not (Download-FromGitHub -BaseUrl $GitHubRawUrl -OutputPath $DownloadPath)) {
+    Write-ColorOutput Red "Failed to download from GitHub"
     Cleanup-TempFiles -TempDir $TempDir
-    Read-Host "Press Enter to exit"
+    Read-Host "Press any key to continue"
     exit 1
 }
 
 # Install application
-if (-not (Install-Application -SourcePath $ExtractPath -DestinationPath $InstallPath)) {
-    Write-ColorOutput Red "❌ Failed to install application"
+if (-not (Install-Application -SourcePath $DownloadPath -DestinationPath $InstallPath)) {
+    Write-ColorOutput Red "Failed to install application"
     Cleanup-TempFiles -TempDir $TempDir
-    Read-Host "Press Enter to exit"
+    Read-Host "Press any key to continue"
     exit 1
 }
 
@@ -249,9 +258,9 @@ Cleanup-TempFiles -TempDir $TempDir
 
 # Success message
 Write-Host ""
-Write-ColorOutput Green "🎉 Installation completed successfully!"
-Write-ColorOutput White "📍 Application installed at: $InstallPath"
-Write-ColorOutput White "🔗 Shortcuts created on Desktop and Start Menu"
+Write-ColorOutput Green "Installation completed successfully!"
+Write-ColorOutput White "Application installed at: $InstallPath"
+Write-ColorOutput White "Shortcuts created on Desktop and Start Menu"
 Write-Host ""
 
 # Ask to launch application
@@ -260,12 +269,12 @@ if ($Launch -eq "Y" -or $Launch -eq "y") {
     $ExePath = Join-Path $InstallPath $ExeName
     if (Test-Path $ExePath) {
         Start-Process $ExePath
-        Write-ColorOutput Green "🚀 MP3 Album Tool launched!"
+        Write-ColorOutput Green "MP3 Album Tool launched!"
     } else {
-        Write-ColorOutput Red "❌ Executable not found at: $ExePath"
+        Write-ColorOutput Red "Executable not found at: $ExePath"
     }
 }
 
 Write-Host ""
 Write-ColorOutput Cyan "Thank you for using MP3 Album Tool!"
-Read-Host "Press Enter to exit"
+Read-Host "Press any key to continue"
